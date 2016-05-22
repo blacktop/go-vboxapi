@@ -1,6 +1,6 @@
 package virtualboxclient
 
-import "github.com/appropriate/go-virtualboxclient/vboxwebsrv"
+import "github.com/blacktio/go-vboxapi/vboxweb"
 
 type Progress struct {
 	virtualbox *VirtualBox

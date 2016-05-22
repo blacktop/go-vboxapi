@@ -1,7 +1,7 @@
 package virtualboxclient
 
 import (
-	"github.com/appropriate/go-virtualboxclient/vboxwebsrv"
+	"github.com/blacktio/go-vboxapi/vboxweb"
 )
 
 type SystemProperties struct {

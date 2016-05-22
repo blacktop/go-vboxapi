@@ -3,7 +3,7 @@ package virtualboxclient
 import (
 	"errors"
 
-	"github.com/appropriate/go-virtualboxclient/vboxwebsrv"
+	"github.com/blacktio/go-vboxapi/vboxweb"
 )
 
 type StorageController struct {

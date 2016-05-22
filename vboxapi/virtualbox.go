@@ -1,10 +1,6 @@
 package virtualboxclient
 
-import (
-	"errors"
-
-	"github.com/appropriate/go-virtualboxclient/vboxwebsrv"
-)
+import "errors"
 
 type VirtualBox struct {
 	*vboxwebsrv.VboxPortType
