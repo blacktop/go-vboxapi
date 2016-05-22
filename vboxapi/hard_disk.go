@@ -1,4 +1,4 @@
-package virtualboxclient
+package vboxapi
 
 type HardDisk struct {
 	virtualbox      *VirtualBox

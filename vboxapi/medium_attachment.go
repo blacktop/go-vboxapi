@@ -1,4 +1,4 @@
-package virtualboxclient
+package vboxapi
 
 import "github.com/blacktio/go-vboxapi/vboxweb"
 

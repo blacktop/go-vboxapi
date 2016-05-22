@@ -1,4 +1,4 @@
-package virtualboxclient
+package vboxapi
 
 type State struct {
 	virtualbox *VirtualBox
