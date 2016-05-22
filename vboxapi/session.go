@@ -8,7 +8,7 @@ type Session struct {
 }
 
 func (s *Session) UnlockMachine() error {
-	request := vboxwebsrv.ISessionunlockMachine{This: s.managedObjectId}
+	request := vboxweb.ISessionunlockMachine{This: s.managedObjectId}
 	_, err := s.virtualbox.ISessionunlockMachine(&request)
 	if err != nil {
 		return err // TODO: Wrap the error
@@ -18,8 +18,8 @@ func (s *Session) UnlockMachine() error {
 	return nil
 }
 
-func (s *Session) LockMachine(m *Machine, l vboxwebsrv.LockType) error {
-	request := vboxwebsrv.IMachinelockMachine{
+func (s *Session) LockMachine(m *Machine, l vboxweb.LockType) error {
+	request := vboxweb.IMachinelockMachine{
 		This:     m.managedObjectId,
 		Session:  s.managedObjectId,
 		LockType: &l,
@@ -34,7 +34,7 @@ func (s *Session) LockMachine(m *Machine, l vboxwebsrv.LockType) error {
 }
 
 func (s *Session) GetMachine() (*Machine, error) {
-	request := vboxwebsrv.ISessiongetMachine{This: s.managedObjectId}
+	request := vboxweb.ISessiongetMachine{This: s.managedObjectId}
 	response, err := s.virtualbox.ISessiongetMachine(&request)
 	if err != nil {
 		return nil, err // TODO: Wrap the error

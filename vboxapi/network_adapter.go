@@ -10,7 +10,7 @@ type NetworkAdapter struct {
 }
 
 func (na *NetworkAdapter) GetMACAddress() (string, error) {
-	request := vboxwebsrv.INetworkAdaptergetMACAddress{This: na.managedObjectId}
+	request := vboxweb.INetworkAdaptergetMACAddress{This: na.managedObjectId}
 
 	response, err := na.virtualbox.INetworkAdaptergetMACAddress(&request)
 	if err != nil {

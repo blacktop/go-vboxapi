@@ -3,7 +3,7 @@ package vboxapi
 import "github.com/blacktop/go-vboxapi/vboxweb"
 
 type MediumAttachment struct {
-	*vboxwebsrv.IMediumAttachment
+	*vboxweb.IMediumAttachment
 	virtualbox      *VirtualBox
 	managedObjectId string
 }

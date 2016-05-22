@@ -17,7 +17,7 @@ type StorageControllers struct {
 }
 
 func (sc *StorageController) GetName() (string, error) {
-	request := vboxwebsrv.IStorageControllergetName{This: sc.managedObjectId}
+	request := vboxweb.IStorageControllergetName{This: sc.managedObjectId}
 
 	response, err := sc.virtualbox.IStorageControllergetName(&request)
 	if err != nil {
@@ -28,7 +28,7 @@ func (sc *StorageController) GetName() (string, error) {
 }
 
 func (sc *StorageController) GetPortCount() (uint32, error) {
-	request := vboxwebsrv.IStorageControllergetPortCount{This: sc.managedObjectId}
+	request := vboxweb.IStorageControllergetPortCount{This: sc.managedObjectId}
 
 	response, err := sc.virtualbox.IStorageControllergetPortCount(&request)
 	if err != nil {
@@ -38,27 +38,27 @@ func (sc *StorageController) GetPortCount() (uint32, error) {
 	return response.Returnval, nil
 }
 
-func (sc *StorageController) GetStorageBus() (vboxwebsrv.StorageBus, error) {
-	mapStorageBus := make(map[string]vboxwebsrv.StorageBus)
-	mapStorageBus["SATA Controller"] = vboxwebsrv.StorageBusSATA
-	mapStorageBus["IDE Controller"] = vboxwebsrv.StorageBusIDE
-	mapStorageBus["SCSI"] = vboxwebsrv.StorageBusSCSI
-	mapStorageBus["SAS"] = vboxwebsrv.StorageBusSAS
+func (sc *StorageController) GetStorageBus() (vboxweb.StorageBus, error) {
+	mapStorageBus := make(map[string]vboxweb.StorageBus)
+	mapStorageBus["SATA Controller"] = vboxweb.StorageBusSATA
+	mapStorageBus["IDE Controller"] = vboxweb.StorageBusIDE
+	mapStorageBus["SCSI"] = vboxweb.StorageBusSCSI
+	mapStorageBus["SAS"] = vboxweb.StorageBusSAS
 
 	scName, err := sc.GetName()
 	if err != nil {
-		return vboxwebsrv.StorageBusNull, err
+		return vboxweb.StorageBusNull, err
 	}
 
 	if bus, ok := mapStorageBus[scName]; ok {
 		return bus, nil
 	}
 
-	return vboxwebsrv.StorageBusNull, errors.New("bad controller controller specified")
+	return vboxweb.StorageBusNull, errors.New("bad controller controller specified")
 }
 
 func (sc *StorageController) GetMaxPortCount() (uint32, error) {
-	request := vboxwebsrv.IStorageControllergetMaxPortCount{This: sc.managedObjectId}
+	request := vboxweb.IStorageControllergetMaxPortCount{This: sc.managedObjectId}
 
 	response, err := sc.virtualbox.IStorageControllergetMaxPortCount(&request)
 	if err != nil {
@@ -69,7 +69,7 @@ func (sc *StorageController) GetMaxPortCount() (uint32, error) {
 }
 
 func (sc *StorageController) SetPortCount(count uint32) error {
-	request := vboxwebsrv.IStorageControllersetPortCount{This: sc.managedObjectId, PortCount: count}
+	request := vboxweb.IStorageControllersetPortCount{This: sc.managedObjectId, PortCount: count}
 
 	_, err := sc.virtualbox.IStorageControllersetPortCount(&request)
 	if err != nil {

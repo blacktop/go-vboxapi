@@ -15,6 +15,6 @@ func main() {
 
 	client := vboxapi.New("", "", url)
 	if err := client.Logon(); err != nil {
-		log.Fatalf("Unable to log on to vboxwebsrv: %v\n", err)
+		log.Fatalf("Unable to log on to vboxweb: %v\n", err)
 	}
 }

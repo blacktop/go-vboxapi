@@ -1,32 +1,36 @@
 package vboxapi
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/blacktop/go-vboxapi/vboxweb"
+)
 
 type VirtualBox struct {
-	*vboxwebsrv.VboxPortType
+	*vboxweb.VboxPortType
 	managedObjectId string
-	basicAuth       *vboxwebsrv.BasicAuth
+	basicAuth       *vboxweb.BasicAuth
 	controllerName  string
 }
 
 func New(username, password, url string, tls bool, controllerName string) *VirtualBox {
-	basicAuth := &vboxwebsrv.BasicAuth{
+	basicAuth := &vboxweb.BasicAuth{
 		Login:    username,
 		Password: password,
 	}
 	return &VirtualBox{
-		VboxPortType:   vboxwebsrv.NewVboxPortType(url, tls, basicAuth),
+		VboxPortType:   vboxweb.NewVboxPortType(url, tls, basicAuth),
 		basicAuth:      basicAuth,
 		controllerName: controllerName,
 	}
 }
 
 func (vb *VirtualBox) CreateHardDisk(format, location string) (*Medium, error) {
-	var am vboxwebsrv.AccessMode
+	var am vboxweb.AccessMode
 	am = "ReadWrite"
-	var dt vboxwebsrv.DeviceType
+	var dt vboxweb.DeviceType
 	dt = "HardDisk"
-	request := vboxwebsrv.IVirtualBoxcreateMedium{
+	request := vboxweb.IVirtualBoxcreateMedium{
 		This: vb.managedObjectId, Format: format, Location: location,
 		AccessMode:      &am,
 		ADeviceTypeType: &dt,
@@ -41,7 +45,7 @@ func (vb *VirtualBox) CreateHardDisk(format, location string) (*Medium, error) {
 }
 
 func (vb *VirtualBox) GetMachines() ([]*Machine, error) {
-	request := vboxwebsrv.IVirtualBoxgetMachines{This: vb.managedObjectId}
+	request := vboxweb.IVirtualBoxgetMachines{This: vb.managedObjectId}
 
 	response, err := vb.IVirtualBoxgetMachines(&request)
 	if err != nil {
@@ -57,7 +61,7 @@ func (vb *VirtualBox) GetMachines() ([]*Machine, error) {
 }
 
 func (vb *VirtualBox) GetSystemProperties() (*SystemProperties, error) {
-	request := vboxwebsrv.IVirtualBoxgetSystemProperties{This: vb.managedObjectId}
+	request := vboxweb.IVirtualBoxgetSystemProperties{This: vb.managedObjectId}
 
 	response, err := vb.IVirtualBoxgetSystemProperties(&request)
 	if err != nil {
@@ -68,7 +72,7 @@ func (vb *VirtualBox) GetSystemProperties() (*SystemProperties, error) {
 }
 
 func (vb *VirtualBox) Logon() error {
-	request := vboxwebsrv.IWebsessionManagerlogon{
+	request := vboxweb.IWebsessionManagerlogon{
 		Username: vb.basicAuth.Login,
 		Password: vb.basicAuth.Password,
 	}
@@ -84,7 +88,7 @@ func (vb *VirtualBox) Logon() error {
 }
 
 func (vb *VirtualBox) GetHardDisk(objectID string) (*HardDisks, error) {
-	request := vboxwebsrv.IVirtualBoxgetHardDisks{This: vb.managedObjectId}
+	request := vboxweb.IVirtualBoxgetHardDisks{This: vb.managedObjectId}
 
 	response, err := vb.IVirtualBoxgetHardDisks(&request)
 	if err != nil {
@@ -169,7 +173,7 @@ func (vb *VirtualBox) RemoveMedium(mediumID string) error {
 }
 
 func (vb *VirtualBox) GetSession() (*Session, error) {
-	request := vboxwebsrv.IWebsessionManagergetSessionObject{RefIVirtualBox: vb.managedObjectId}
+	request := vboxweb.IWebsessionManagergetSessionObject{RefIVirtualBox: vb.managedObjectId}
 	response, err := vb.IWebsessionManagergetSessionObject(&request)
 	if err != nil {
 		return nil, err // TODO: Wrap the error
@@ -181,7 +185,7 @@ func (vb *VirtualBox) GetSession() (*Session, error) {
 }
 
 func (vb *VirtualBox) FindMachine(nameOrID string) (*Machine, error) {
-	request := vboxwebsrv.IVirtualBoxfindMachine{This: vb.managedObjectId, NameOrId: nameOrID}
+	request := vboxweb.IVirtualBoxfindMachine{This: vb.managedObjectId, NameOrId: nameOrID}
 	response, err := vb.IVirtualBoxfindMachine(&request)
 	if err != nil {
 		return nil, err // TODO: Wrap the error
@@ -191,7 +195,7 @@ func (vb *VirtualBox) FindMachine(nameOrID string) (*Machine, error) {
 }
 
 func (vb *VirtualBox) Release(managedObjectId string) error {
-	request := vboxwebsrv.IManagedObjectRefrelease{This: managedObjectId}
+	request := vboxweb.IManagedObjectRefrelease{This: managedObjectId}
 
 	_, err := vb.IManagedObjectRefrelease(&request)
 	if err != nil {

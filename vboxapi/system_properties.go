@@ -9,8 +9,8 @@ type SystemProperties struct {
 	managedObjectId string
 }
 
-func (sp *SystemProperties) GetMaxNetworkAdapters(chipset *vboxwebsrv.ChipsetType) (uint32, error) {
-	request := vboxwebsrv.ISystemPropertiesgetMaxNetworkAdapters{This: sp.managedObjectId, Chipset: chipset}
+func (sp *SystemProperties) GetMaxNetworkAdapters(chipset *vboxweb.ChipsetType) (uint32, error) {
+	request := vboxweb.ISystemPropertiesgetMaxNetworkAdapters{This: sp.managedObjectId, Chipset: chipset}
 
 	response, err := sp.virtualbox.ISystemPropertiesgetMaxNetworkAdapters(&request)
 	if err != nil {
@@ -20,8 +20,8 @@ func (sp *SystemProperties) GetMaxNetworkAdapters(chipset *vboxwebsrv.ChipsetTyp
 	return response.Returnval, nil
 }
 
-func (sp *SystemProperties) GetMaxDevicesPerPortForStorageBus(bus vboxwebsrv.StorageBus) (uint32, error) {
-	request := vboxwebsrv.ISystemPropertiesgetMaxDevicesPerPortForStorageBus{This: sp.managedObjectId, Bus: &bus}
+func (sp *SystemProperties) GetMaxDevicesPerPortForStorageBus(bus vboxweb.StorageBus) (uint32, error) {
+	request := vboxweb.ISystemPropertiesgetMaxDevicesPerPortForStorageBus{This: sp.managedObjectId, Bus: &bus}
 	response, err := sp.virtualbox.ISystemPropertiesgetMaxDevicesPerPortForStorageBus(&request)
 	if err != nil {
 		return 0, err // TODO: Wrap the error
@@ -30,8 +30,8 @@ func (sp *SystemProperties) GetMaxDevicesPerPortForStorageBus(bus vboxwebsrv.Sto
 	return response.Returnval, nil
 }
 
-func (sp *SystemProperties) GetMinPortCountForStorageBus(bus vboxwebsrv.StorageBus) (uint32, error) {
-	request := vboxwebsrv.ISystemPropertiesgetMinPortCountForStorageBus{This: sp.managedObjectId, Bus: &bus}
+func (sp *SystemProperties) GetMinPortCountForStorageBus(bus vboxweb.StorageBus) (uint32, error) {
+	request := vboxweb.ISystemPropertiesgetMinPortCountForStorageBus{This: sp.managedObjectId, Bus: &bus}
 	response, err := sp.virtualbox.ISystemPropertiesgetMinPortCountForStorageBus(&request)
 	if err != nil {
 		return 0, err // TODO: Wrap the error
