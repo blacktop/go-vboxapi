@@ -1,7 +1,7 @@
 package vboxapi
 
 import (
-	"github.com/blacktio/go-vboxapi/vboxweb"
+	"github.com/blacktop/go-vboxapi/vboxweb"
 )
 
 type NetworkAdapter struct {

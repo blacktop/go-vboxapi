@@ -3,7 +3,7 @@ package vboxapi
 import (
 	"errors"
 
-	"github.com/blacktio/go-vboxapi/vboxweb"
+	"github.com/blacktop/go-vboxapi/vboxweb"
 )
 
 type StorageController struct {

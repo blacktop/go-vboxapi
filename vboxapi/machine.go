@@ -3,7 +3,7 @@ package vboxapi
 import (
 	"errors"
 
-	"github.com/blacktio/go-vboxapi/vboxweb"
+	"github.com/appropriate/go-virtualboxclient/vboxwebsrv"
 )
 
 type Machine struct {
