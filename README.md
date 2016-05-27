@@ -7,7 +7,7 @@ Go interface to VirtualBox's remote [API](https://www.virtualbox.org/sdkref/)
 ### MVP
  - [ ] PowerUp (from snapshot)
  - [ ] PowerDown
- - [ ] List all VMs
+ - [x] List all VMs
 
 ### Credits
  - Big shout out to [@md5](https://github.com/md5) whose project [go-virtualboxclient](https://github.com/appropriate/go-virtualboxclient) is completely the inspiration for this.  
