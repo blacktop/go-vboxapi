@@ -17,4 +17,5 @@ func main() {
 	if err := client.Logon(); err != nil {
 		log.Fatalf("Unable to log on to vboxweb: %v\n", err)
 	}
+	session := vboxapi.Session{virtualbox: client}
 }
