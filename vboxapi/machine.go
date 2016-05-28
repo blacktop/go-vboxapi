@@ -20,6 +20,78 @@ type Machine struct {
 // 	return &NetworkAdapter{m.virtualbox, response.Returnval}, nil
 // }
 
+// TakeSnapshot takes a snapshot of the currently locked machine
+// Saves the current execution state and all settings of the machine and
+// creates differencing images for all normal (non-independent) media.
+func (m *Machine) TakeSnapshot(name string, description string) (*Progress, error) {
+	request := vboxweb4.IMachinetakeSnapshot{
+		This:        m.managedObjectId,
+		Name:        name,
+		Description: description,
+		Pause:       false,
+	}
+
+	response, err := m.virtualbox.IMachinetakeSnapshot(&request)
+	if err != nil {
+		return nil, err // TODO: Wrap the error
+	}
+
+	// TODO: See if we need to do anything with the response
+	return &Progress{virtualbox: m.virtualbox, managedObjectId: response.Returnval}, nil
+}
+
+// FindSnapshot finds a snapshot matching a name or ID
+// Returns a snapshot of this machine with the given UUID
+func (m *Machine) FindSnapshot(nameOrID string) (*Snapshot, error) {
+	request := vboxweb4.IMachinefindSnapshot{
+		This:     m.managedObjectId,
+		NameOrId: nameOrID,
+	}
+
+	response, err := m.virtualbox.IMachinefindSnapshot(&request)
+	if err != nil {
+		return nil, err // TODO: Wrap the error
+	}
+
+	// TODO: See if we need to do anything with the response
+	return &Snapshot{virtualbox: m.virtualbox, managedObjectID: response.Returnval}, nil
+}
+
+// RestoreSnapshot starts resetting the machine's current state to the state
+// contained in the given snapshot, asynchronously
+// Returns a *Progress
+func (m *Machine) RestoreSnapshot(snapshot *Snapshot) (*Progress, error) {
+	request := vboxweb4.IMachinerestoreSnapshot{
+		This:     m.managedObjectId,
+		Snapshot: snapshot.managedObjectID,
+	}
+
+	response, err := m.virtualbox.IMachinerestoreSnapshot(&request)
+	if err != nil {
+		return nil, err // TODO: Wrap the error
+	}
+
+	// TODO: See if we need to do anything with the response
+	return &Progress{virtualbox: m.virtualbox, managedObjectId: response.Returnval}, nil
+}
+
+// DeleteSnapshot starts deleting the specified snapshot asynchronously.
+// Returns a *Progress
+func (m *Machine) DeleteSnapshot(snapshot *Snapshot) (*Progress, error) {
+	request := vboxweb4.IMachinedeleteSnapshot{
+		This: m.managedObjectId,
+		Id:   snapshot.managedObjectID,
+	}
+
+	response, err := m.virtualbox.IMachinedeleteSnapshot(&request)
+	if err != nil {
+		return nil, err // TODO: Wrap the error
+	}
+
+	// TODO: See if we need to do anything with the response
+	return &Progress{virtualbox: m.virtualbox, managedObjectId: response.Returnval}, nil
+}
+
 func (m *Machine) GetSettingsFilePath() (string, error) {
 	request := vboxweb4.IMachinegetSettingsFilePath{This: m.managedObjectId}
 

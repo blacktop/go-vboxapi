@@ -1,9 +1,6 @@
 package vboxapi
 
-import (
-	"github.com/blacktop/go-vboxapi/vboxweb-v4"
-	"github.com/blacktop/go-vboxapi/vboxweb-v5"
-)
+import "github.com/blacktop/go-vboxapi/vboxweb-v4"
 
 // Console is a VirtualBox console object
 type Console struct {
@@ -42,7 +39,7 @@ func (c *Console) PowerUp() (*Progress, error) {
 // Saves the current execution state and all settings of the machine and
 // creates differencing images for all normal (non-independent) media.
 func (c *Console) TakeSnapshot(name string, description string) (string, error) {
-	request := vboxweb5.IConsoletakeSnapshot{
+	request := vboxweb4.IConsoletakeSnapshot{
 		This:        c.managedObjectID,
 		Name:        name,
 		Description: description,

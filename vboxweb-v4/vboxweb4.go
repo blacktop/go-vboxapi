@@ -5659,6 +5659,75 @@ type IMachinefindSnapshotResponse struct {
 	Returnval string `xml:"returnval,omitempty"`
 }
 
+type IMachinetakeSnapshot struct {
+	XMLName xml.Name `xml:"http://www.virtualbox.org/ IMachine_takeSnapshot"`
+
+	This        string `xml:"_this,omitempty"`
+	Name        string `xml:"name,omitempty"`
+	Description string `xml:"description,omitempty"`
+	Pause       bool   `xml:"pause,omitempty"`
+}
+
+type IMachinetakeSnapshotResponse struct {
+	XMLName xml.Name `xml:"http://www.virtualbox.org/ IMachine_takeSnapshotResponse"`
+
+	Id        string `xml:"id,omitempty"`
+	Returnval string `xml:"returnval,omitempty"`
+}
+
+type IMachinedeleteSnapshot struct {
+	XMLName xml.Name `xml:"http://www.virtualbox.org/ IMachine_deleteSnapshot"`
+
+	This string `xml:"_this,omitempty"`
+	Id   string `xml:"id,omitempty"`
+}
+
+type IMachinedeleteSnapshotResponse struct {
+	XMLName xml.Name `xml:"http://www.virtualbox.org/ IMachine_deleteSnapshotResponse"`
+
+	Returnval string `xml:"returnval,omitempty"`
+}
+
+type IMachinedeleteSnapshotAndAllChildren struct {
+	XMLName xml.Name `xml:"http://www.virtualbox.org/ IMachine_deleteSnapshotAndAllChildren"`
+
+	This string `xml:"_this,omitempty"`
+	Id   string `xml:"id,omitempty"`
+}
+
+type IMachinedeleteSnapshotAndAllChildrenResponse struct {
+	XMLName xml.Name `xml:"http://www.virtualbox.org/ IMachine_deleteSnapshotAndAllChildrenResponse"`
+
+	Returnval string `xml:"returnval,omitempty"`
+}
+
+type IMachinedeleteSnapshotRange struct {
+	XMLName xml.Name `xml:"http://www.virtualbox.org/ IMachine_deleteSnapshotRange"`
+
+	This    string `xml:"_this,omitempty"`
+	StartId string `xml:"startId,omitempty"`
+	EndId   string `xml:"endId,omitempty"`
+}
+
+type IMachinedeleteSnapshotRangeResponse struct {
+	XMLName xml.Name `xml:"http://www.virtualbox.org/ IMachine_deleteSnapshotRangeResponse"`
+
+	Returnval string `xml:"returnval,omitempty"`
+}
+
+type IMachinerestoreSnapshot struct {
+	XMLName xml.Name `xml:"http://www.virtualbox.org/ IMachine_restoreSnapshot"`
+
+	This     string `xml:"_this,omitempty"`
+	Snapshot string `xml:"snapshot,omitempty"`
+}
+
+type IMachinerestoreSnapshotResponse struct {
+	XMLName xml.Name `xml:"http://www.virtualbox.org/ IMachine_restoreSnapshotResponse"`
+
+	Returnval string `xml:"returnval,omitempty"`
+}
+
 type IMachinecreateSharedFolder struct {
 	XMLName xml.Name `xml:"http://www.virtualbox.org/ IMachine_createSharedFolder"`
 
@@ -19059,6 +19128,81 @@ func (service *VboxPortType) IMachinegetSnapshotFolder(request *IMachinegetSnaps
 
 func (service *VboxPortType) IMachinesetSnapshotFolder(request *IMachinesetSnapshotFolder) (*IMachinesetSnapshotFolderResponse, error) {
 	response := new(IMachinesetSnapshotFolderResponse)
+	err := service.client.Call("", request, response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}
+
+// Error can be either of the following types:
+//
+//   - InvalidObjectFault
+//   - RuntimeFault
+
+func (service *VboxPortType) IMachinetakeSnapshot(request *IMachinetakeSnapshot) (*IMachinetakeSnapshotResponse, error) {
+	response := new(IMachinetakeSnapshotResponse)
+	err := service.client.Call("", request, response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}
+
+// Error can be either of the following types:
+//
+//   - InvalidObjectFault
+//   - RuntimeFault
+
+func (service *VboxPortType) IMachinedeleteSnapshot(request *IMachinedeleteSnapshot) (*IMachinedeleteSnapshotResponse, error) {
+	response := new(IMachinedeleteSnapshotResponse)
+	err := service.client.Call("", request, response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}
+
+// Error can be either of the following types:
+//
+//   - InvalidObjectFault
+//   - RuntimeFault
+
+func (service *VboxPortType) IMachinedeleteSnapshotAndAllChildren(request *IMachinedeleteSnapshotAndAllChildren) (*IMachinedeleteSnapshotAndAllChildrenResponse, error) {
+	response := new(IMachinedeleteSnapshotAndAllChildrenResponse)
+	err := service.client.Call("", request, response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}
+
+// Error can be either of the following types:
+//
+//   - InvalidObjectFault
+//   - RuntimeFault
+
+func (service *VboxPortType) IMachinedeleteSnapshotRange(request *IMachinedeleteSnapshotRange) (*IMachinedeleteSnapshotRangeResponse, error) {
+	response := new(IMachinedeleteSnapshotRangeResponse)
+	err := service.client.Call("", request, response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}
+
+// Error can be either of the following types:
+//
+//   - InvalidObjectFault
+//   - RuntimeFault
+
+func (service *VboxPortType) IMachinerestoreSnapshot(request *IMachinerestoreSnapshot) (*IMachinerestoreSnapshotResponse, error) {
+	response := new(IMachinerestoreSnapshotResponse)
 	err := service.client.Call("", request, response)
 	if err != nil {
 		return nil, err

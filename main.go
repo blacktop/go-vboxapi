@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/blacktop/go-vboxapi/vboxapi"
 )
@@ -51,7 +52,14 @@ func main() {
 			// console, err := vbSession.GetConsole()
 			// assert(err)
 
-			progress, err := vbSession.LaunchVMProcess(machine)
+			snapshot, err := machine.FindSnapshot("test")
+			assert(err)
+
+			progress, err := machine.RestoreSnapshot(snapshot)
+			assert(err)
+			assert(progress.WaitForCompletion(-1))
+
+			progress, err = vbSession.LaunchVMProcess(machine)
 			assert(err)
 
 			assert(progress.WaitForCompletion(-1))
@@ -59,11 +67,17 @@ func main() {
 			sessionMachine, err := vbSession.GetMachine()
 			assert(err)
 
+			// progress, err = sessionMachine.TakeSnapshot("test3", "this is another test snapshot")
+			// assert(err)
+			// assert(progress.WaitForCompletion(-1))
+
 			name, err := sessionMachine.GetName()
 			assert(err)
 
 			console, err := vbSession.GetConsole()
 			assert(err)
+
+			time.Sleep(5 * time.Second)
 
 			progress, err = console.PowerDown()
 			assert(err)
