@@ -8,6 +8,8 @@ Go interface to VirtualBox's remote [API](https://www.virtualbox.org/sdkref/)
  - [ ] PowerUp (from snapshot)
  - [x] PowerDown
  - [x] List all VMs
+ - [ ] dump PCAP
+ - [ ] dump Memory
 
 ### Credits
  - Big shout out to [@md5](https://github.com/md5) whose project [go-virtualboxclient](https://github.com/appropriate/go-virtualboxclient) is completely the inspiration for this.  
