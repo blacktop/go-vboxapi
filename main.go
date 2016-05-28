@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/blacktop/go-vboxapi/vboxapi"
 )
@@ -13,6 +14,14 @@ func assert(err error) {
 		log.Fatal(err)
 	}
 }
+
+// PowerOn power on machine
+// func PowerOn(client *vboxapi.VirtualBox, machineID string) error {
+// 	progress, err := client.GetRemoteSession(machineID)
+// 	assert(err)
+// 	progress.WaitForCompletion(-1)
+// 	return nil
+// }
 
 func main() {
 	url := "http://127.0.0.1:18083"
@@ -29,6 +38,47 @@ func main() {
 	for _, machine := range machines {
 		name, err := machine.GetName()
 		assert(err)
-		fmt.Println(name)
+		machineID, err := machine.GetID()
+		assert(err)
+		fmt.Println(name, ": ", machineID)
+		if strings.EqualFold(name, "default") {
+			// assert(PowerOn(client, machineID))
+			vbSession, err := client.GetSession()
+			assert(err)
+
+			// assert(vbSession.LockMachine(machine, "Write"))
+
+			// console, err := vbSession.GetConsole()
+			// assert(err)
+
+			progress, err := vbSession.LaunchVMProcess(machine)
+			assert(err)
+
+			assert(progress.WaitForCompletion(-1))
+
+			sessionMachine, err := vbSession.GetMachine()
+			assert(err)
+
+			name, err := sessionMachine.GetName()
+			assert(err)
+
+			console, err := vbSession.GetConsole()
+			assert(err)
+
+			progress, err = console.PowerDown()
+			assert(err)
+			assert(progress.WaitForCompletion(-1))
+
+			fmt.Println("Session Machine: ", name)
+			assert(vbSession.UnlockMachine())
+		}
 	}
+
+	// machine, err := client.FindMachine("6e94d53e-5f78-4366-9b48-a5725ac6dbfb")
+	// assert(err)
+	// machineID, err := machine.GetID()
+	// assert(err)
+
+	// log off
+	assert(client.LogOff())
 }

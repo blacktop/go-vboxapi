@@ -1,6 +1,6 @@
 package vboxapi
 
-import "github.com/blacktop/go-vboxapi/vboxweb"
+import "github.com/blacktop/go-vboxapi/vboxweb-v4"
 
 type Progress struct {
 	virtualbox *VirtualBox
@@ -9,7 +9,7 @@ type Progress struct {
 }
 
 func (p *Progress) WaitForCompletion(timeout int32) error {
-	request := vboxweb.IProgresswaitForCompletion{This: p.managedObjectId}
+	request := vboxweb4.IProgresswaitForCompletion{This: p.managedObjectId}
 	request.Timeout = timeout
 
 	_, err := p.virtualbox.IProgresswaitForCompletion(&request)
@@ -22,7 +22,7 @@ func (p *Progress) WaitForCompletion(timeout int32) error {
 }
 
 func (p *Progress) GetPercent() (uint32, error) {
-	request := vboxweb.IProgressgetPercent{This: p.managedObjectId}
+	request := vboxweb4.IProgressgetPercent{This: p.managedObjectId}
 
 	response, err := p.virtualbox.IProgressgetPercent(&request)
 	if err != nil {

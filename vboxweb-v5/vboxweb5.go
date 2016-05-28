@@ -1,4 +1,4 @@
-package vboxweb
+package vboxweb5
 
 import (
 	"bytes"

@@ -1,6 +1,6 @@
 package vboxapi
 
-import "github.com/blacktop/go-vboxapi/vboxweb"
+import "github.com/blacktop/go-vboxapi/vboxweb-v4"
 
 type Machine struct {
 	virtualbox      *VirtualBox
@@ -10,7 +10,7 @@ type Machine struct {
 }
 
 // func (m *Machine) GetNetworkAdapter(slot uint32) (*NetworkAdapter, error) {
-// 	request := vboxweb.IMachinegetNetworkAdapter{This: m.managedObjectId, Slot: slot}
+// 	request := vboxweb4.IMachinegetNetworkAdapter{This: m.managedObjectId, Slot: slot}
 //
 // 	response, err := m.virtualbox.IMachinegetNetworkAdapter(&request)
 // 	if err != nil {
@@ -21,7 +21,7 @@ type Machine struct {
 // }
 
 func (m *Machine) GetSettingsFilePath() (string, error) {
-	request := vboxweb.IMachinegetSettingsFilePath{This: m.managedObjectId}
+	request := vboxweb4.IMachinegetSettingsFilePath{This: m.managedObjectId}
 
 	response, err := m.virtualbox.IMachinegetSettingsFilePath(&request)
 	if err != nil {
@@ -32,7 +32,7 @@ func (m *Machine) GetSettingsFilePath() (string, error) {
 }
 
 func (m *Machine) SaveSettings() error {
-	request := vboxweb.IMachinesaveSettings{This: m.managedObjectId}
+	request := vboxweb4.IMachinesaveSettings{This: m.managedObjectId}
 
 	_, err := m.virtualbox.IMachinesaveSettings(&request)
 	if err != nil {
@@ -44,7 +44,7 @@ func (m *Machine) SaveSettings() error {
 }
 
 func (m *Machine) DiscardSettings() error {
-	request := vboxweb.IMachinediscardSettings{This: m.managedObjectId}
+	request := vboxweb4.IMachinediscardSettings{This: m.managedObjectId}
 
 	_, err := m.virtualbox.IMachinediscardSettings(&request)
 	if err != nil {
@@ -61,15 +61,16 @@ func (m *Machine) DiscardSettings() error {
 // 	return nil
 // }
 
-// func (m *Machine) Lock(session *Session, lockType vboxweb.LockType) error {
-// 	if err := session.LockMachine(m, lockType); err != nil {
+// func (m *Machine) Lock(session *Session) error {
+// 	request := vboxweb4.IMachineaddStorageController
+// 	if err := session.LockMachine(m, 3); err != nil {
 // 		return err
 // 	}
 // 	return nil
 // }
 
 func (m *Machine) GetID() (string, error) {
-	request := vboxweb.IMachinegetId{This: m.managedObjectId}
+	request := vboxweb4.IMachinegetId{This: m.managedObjectId}
 
 	response, err := m.virtualbox.IMachinegetId(&request)
 	if err != nil {
@@ -81,7 +82,7 @@ func (m *Machine) GetID() (string, error) {
 }
 
 func (m *Machine) GetName() (string, error) {
-	request := vboxweb.IMachinegetName{This: m.managedObjectId}
+	request := vboxweb4.IMachinegetName{This: m.managedObjectId}
 
 	response, err := m.virtualbox.IMachinegetName(&request)
 	if err != nil {

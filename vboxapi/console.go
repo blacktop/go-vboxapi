@@ -1,17 +1,21 @@
 package vboxapi
 
-import "github.com/blacktop/go-vboxapi/vboxweb"
+import (
+	"github.com/blacktop/go-vboxapi/vboxweb-v4"
+	"github.com/blacktop/go-vboxapi/vboxweb-v5"
+)
 
 // Console is a VirtualBox console object
 type Console struct {
 	virtualbox      *VirtualBox
 	managedObjectID string
+	machine         *Machine
 }
 
 // PowerDown starts forcibly powering off the controlled VM.
 // It returns a Progress and any error encountered.
 func (c *Console) PowerDown() (*Progress, error) {
-	request := vboxweb.IConsolepowerDown{This: c.managedObjectID}
+	request := vboxweb4.IConsolepowerDown{This: c.managedObjectID}
 
 	response, err := c.virtualbox.IConsolepowerDown(&request)
 	if err != nil {
@@ -24,7 +28,7 @@ func (c *Console) PowerDown() (*Progress, error) {
 // PowerUp starts powering on the controlled VM.
 // It returns a Progress and any error encountered.
 func (c *Console) PowerUp() (*Progress, error) {
-	request := vboxweb.IConsolepowerUp{This: c.managedObjectID}
+	request := vboxweb4.IConsolepowerUp{This: c.managedObjectID}
 
 	response, err := c.virtualbox.IConsolepowerUp(&request)
 	if err != nil {
@@ -32,6 +36,25 @@ func (c *Console) PowerUp() (*Progress, error) {
 	}
 
 	return &Progress{virtualbox: c.virtualbox, managedObjectId: response.Returnval}, nil
+}
+
+// TakeSnapshot takes a snapshot of the currently locked machine
+// Saves the current execution state and all settings of the machine and
+// creates differencing images for all normal (non-independent) media.
+func (c *Console) TakeSnapshot(name string, description string) (string, error) {
+	request := vboxweb5.IConsoletakeSnapshot{
+		This:        c.managedObjectID,
+		Name:        name,
+		Description: description,
+	}
+
+	response, err := c.virtualbox.IConsoletakeSnapshot(&request)
+	if err != nil {
+		return "", err // TODO: Wrap the error
+	}
+
+	// TODO: See if we need to do anything with the response
+	return response.Returnval, nil
 }
 
 // func (console *Console) PowerDown() (Progress, error) {

@@ -1,32 +1,76 @@
 package vboxapi
 
-import "github.com/blacktop/go-vboxapi/vboxweb"
+import "github.com/blacktop/go-vboxapi/vboxweb-v4"
 
 type VirtualBox struct {
-	*vboxweb.VboxPortType
+	*vboxweb4.VboxPortType
 	managedObjectId string
-	basicAuth       *vboxweb.BasicAuth
+	basicAuth       *vboxweb4.BasicAuth
 	controllerName  string
 }
 
 func New(username, password, url string, tls bool, controllerName string) *VirtualBox {
-	basicAuth := &vboxweb.BasicAuth{
+	basicAuth := &vboxweb4.BasicAuth{
 		Login:    username,
 		Password: password,
 	}
 	return &VirtualBox{
-		VboxPortType:   vboxweb.NewVboxPortType(url, tls, basicAuth),
+		VboxPortType:   vboxweb4.NewVboxPortType(url, tls, basicAuth),
 		basicAuth:      basicAuth,
 		controllerName: controllerName,
 	}
 }
 
+// GetExistingSession opens a existing session.
+// func (vb *VirtualBox) GetExistingSession(machineID string) error {
+// 	vbSession, err := vb.GetSession()
+// 	if err != nil {
+// 		return err // TODO: Wrap the error
+// 	}
+// 	request := vboxweb4.IVirtualBoxopenExistingSession{
+// 		This:      vb.managedObjectId,
+// 		Session:   vbSession.managedObjectId,
+// 		MachineId: machineID,
+// 	}
+
+// 	_, err = vb.IVirtualBoxopenExistingSession(&request)
+// 	if err != nil {
+// 		return err // TODO: Wrap the error
+// 	}
+
+// 	// TODO: See if we need to do anything with the response
+// 	return nil
+// }
+
+// GetRemoteSession opens a remote session.
+// func (vb *VirtualBox) GetRemoteSession(machineID string) (*Progress, error) {
+// 	vbSession, err := vb.GetSession()
+// 	if err != nil {
+// 		return nil, err // TODO: Wrap the error
+// 	}
+// 	request := vboxweb4.IVirtualBoxopenRemoteSession{
+// 		This:      vb.managedObjectId,
+// 		Session:   vbSession.managedObjectId,
+// 		MachineId: machineID,
+// 		// Type_       string `xml:"type,omitempty"`
+// 		// Environment string `xml:"environment,omitempty"`
+// 	}
+
+// 	response, err := vb.IVirtualBoxopenRemoteSession(&request)
+// 	if err != nil {
+// 		return nil, err // TODO: Wrap the error
+// 	}
+
+// 	// TODO: See if we need to do anything with the response
+// 	return &Progress{virtualbox: vb, managedObjectId: response.Returnval}, nil
+// }
+
 // func (vb *VirtualBox) CreateHardDisk(format, location string) (*Medium, error) {
-// 	var am vboxweb.AccessMode
+// 	var am vboxweb4.AccessMode
 // 	am = "ReadWrite"
-// 	var dt vboxweb.DeviceType
+// 	var dt vboxweb4.DeviceType
 // 	dt = "HardDisk"
-// 	request := vboxweb.IVirtualBoxcreateMedium{
+// 	request := vboxweb4.IVirtualBoxcreateMedium{
 // 		This: vb.managedObjectId, Format: format, Location: location,
 // 		AccessMode:      &am,
 // 		ADeviceTypeType: &dt,
@@ -41,7 +85,7 @@ func New(username, password, url string, tls bool, controllerName string) *Virtu
 // }
 
 func (vb *VirtualBox) GetMachines() ([]*Machine, error) {
-	request := vboxweb.IVirtualBoxgetMachines{This: vb.managedObjectId}
+	request := vboxweb4.IVirtualBoxgetMachines{This: vb.managedObjectId}
 
 	response, err := vb.IVirtualBoxgetMachines(&request)
 	if err != nil {
@@ -57,7 +101,7 @@ func (vb *VirtualBox) GetMachines() ([]*Machine, error) {
 }
 
 // func (vb *VirtualBox) GetSystemProperties() (*SystemProperties, error) {
-// 	request := vboxweb.IVirtualBoxgetSystemProperties{This: vb.managedObjectId}
+// 	request := vboxweb4.IVirtualBoxgetSystemProperties{This: vb.managedObjectId}
 //
 // 	response, err := vb.IVirtualBoxgetSystemProperties(&request)
 // 	if err != nil {
@@ -68,7 +112,7 @@ func (vb *VirtualBox) GetMachines() ([]*Machine, error) {
 // }
 
 func (vb *VirtualBox) Logon() error {
-	request := vboxweb.IWebsessionManagerlogon{
+	request := vboxweb4.IWebsessionManagerlogon{
 		Username: vb.basicAuth.Login,
 		Password: vb.basicAuth.Password,
 	}
@@ -83,8 +127,19 @@ func (vb *VirtualBox) Logon() error {
 	return nil
 }
 
+func (vb *VirtualBox) LogOff() error {
+	request := vboxweb4.IWebsessionManagerlogoff{RefIVirtualBox: vb.managedObjectId}
+
+	_, err := vb.IWebsessionManagerlogoff(&request)
+	if err != nil {
+		return err // TODO: Wrap the error
+	}
+
+	return nil
+}
+
 // func (vb *VirtualBox) GetHardDisk(objectID string) (*HardDisks, error) {
-// 	request := vboxweb.IVirtualBoxgetHardDisks{This: vb.managedObjectId}
+// 	request := vboxweb4.IVirtualBoxgetHardDisks{This: vb.managedObjectId}
 //
 // 	response, err := vb.IVirtualBoxgetHardDisks(&request)
 // 	if err != nil {
@@ -169,7 +224,7 @@ func (vb *VirtualBox) Logon() error {
 // }
 
 func (vb *VirtualBox) GetSession() (*Session, error) {
-	request := vboxweb.IWebsessionManagergetSessionObject{RefIVirtualBox: vb.managedObjectId}
+	request := vboxweb4.IWebsessionManagergetSessionObject{RefIVirtualBox: vb.managedObjectId}
 	response, err := vb.IWebsessionManagergetSessionObject(&request)
 	if err != nil {
 		return nil, err // TODO: Wrap the error
@@ -181,9 +236,9 @@ func (vb *VirtualBox) GetSession() (*Session, error) {
 }
 
 func (vb *VirtualBox) FindMachine(nameOrID string) (*Machine, error) {
-	request := vboxweb.IVirtualBoxfindMachine{
-		This: vb.managedObjectId,
-		Name: nameOrID,
+	request := vboxweb4.IVirtualBoxfindMachine{
+		This:     vb.managedObjectId,
+		NameOrId: nameOrID,
 	}
 	response, err := vb.IVirtualBoxfindMachine(&request)
 	if err != nil {
@@ -194,7 +249,7 @@ func (vb *VirtualBox) FindMachine(nameOrID string) (*Machine, error) {
 }
 
 func (vb *VirtualBox) Release(managedObjectId string) error {
-	request := vboxweb.IManagedObjectRefrelease{This: managedObjectId}
+	request := vboxweb4.IManagedObjectRefrelease{This: managedObjectId}
 
 	_, err := vb.IManagedObjectRefrelease(&request)
 	if err != nil {
