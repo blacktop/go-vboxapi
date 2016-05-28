@@ -6,7 +6,7 @@ Go interface to VirtualBox's remote [API](https://www.virtualbox.org/sdkref/)
 
 ### MVP
  - [ ] PowerUp (from snapshot)
- - [ ] PowerDown
+ - [x] PowerDown
  - [x] List all VMs
 
 ### Credits
